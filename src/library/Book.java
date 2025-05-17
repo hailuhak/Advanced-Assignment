@@ -1,0 +1,642 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package library;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.PreparedStatement;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
+/**
+ *
+ * @author cslab
+ */
+public class Book extends javax.swing.JFrame {
+
+    /**
+     * Creates new form author
+     */
+    public Book(){
+        initComponents();
+        connect();
+         catagory();
+         author();
+         publisher();
+         bookLode();
+          }
+    
+    public class catagoryItem{
+        int id;
+        String name;
+        public catagoryItem(int id,String name){
+                this.id=id;
+                this.name=name;
+        }
+        public String  toString(){
+           return name;
+
+        }
+    }
+    
+      public class authorItem{
+        int id;
+        String name;
+        public authorItem(int id,String name){
+                this.id=id;
+                this.name=name;
+        }
+        public String  toString(){
+           return name;
+
+        }
+    }
+      public class publisherItem{
+        int id;
+        String name;
+        public publisherItem(int id,String name){
+                this.id=id;
+                this.name=name;
+        }
+        public String  toString(){
+           return name;
+
+        }
+    }
+    
+    
+    Connection con;
+    PreparedStatement pre;
+    ResultSet rs;
+ 
+  public void connect(){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/librarymas","root","1234");
+            System.out.println("connected Succsesfuly");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
+  public void catagory(){
+        try {
+            pre= con.prepareStatement("select*from catagory");
+            rs=pre.executeQuery();
+             combCatagory.removeAllItems();
+             while(rs.next()){
+              combCatagory.addItem(new catagoryItem(rs.getInt(1),rs.getString(2)));
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+  }
+  
+  
+    public void author(){
+        try {
+            pre= con.prepareStatement("select*from author");
+            rs=pre.executeQuery();
+             combAuthor.removeAllItems();
+             while(rs.next()){
+              combAuthor.addItem(new authorItem(rs.getInt(1),rs.getString(2)));
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+  }
+  
+    public void publisher(){
+        try {
+            pre= con.prepareStatement("select*from publisher");
+            rs=pre.executeQuery();
+             combPublisher.removeAllItems();
+             while(rs.next()){
+              combPublisher.addItem(new publisherItem(rs.getInt(1),rs.getString(2)));
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+  }
+  
+  
+  
+public void bookLode() {
+    try {
+        String sql = """
+            SELECT 
+                b.id, 
+                b.bookName, 
+                c.catagoryName, 
+                a.AutherName AS author, 
+                p.publisherName, 
+                p.Address, 
+                p.phonNo
+            FROM book b
+            JOIN catagory c ON b.catagory = c.id
+            JOIN author a ON b.author = a.id
+            JOIN publisher p ON b.publisher = p.id
+        """;
+
+        PreparedStatement pre = con.prepareStatement(sql);
+        ResultSet rs = pre.executeQuery();
+
+        DefaultTableModel d = (DefaultTableModel) bookTable.getModel();
+        d.setRowCount(0);
+
+        while (rs.next()) {
+            Vector<String> v = new Vector<>();
+            v.add(rs.getString("id"));             
+            v.add(rs.getString("bookName"));      
+            v.add(rs.getString("catagoryName"));   
+            v.add(rs.getString("author"));          
+            v.add(rs.getString("publisherName")); 
+            v.add(rs.getString("Address"));         
+            v.add(rs.getString("phonNo"));          
+            d.addRow(v);
+        }
+
+        rs.close();
+        pre.close();
+
+    } catch (SQLException ex) {
+        Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
+
+
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnCancle = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        bookTable = new javax.swing.JTable();
+        txtContent = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        combPublisher = new javax.swing.JComboBox();
+        combAuthor = new javax.swing.JComboBox();
+        combCatagory = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtPage = new javax.swing.JTextField();
+        txtEdition = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(51, 0, 51));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Book");
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Name");
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Catacory");
+
+        btnAdd.setText("ADD");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnCancle.setText("Cancel");
+        btnCancle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancleActionPerformed(evt);
+            }
+        });
+
+        bookTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Book Name", "Catagory", "Author", "Publisher", "Contentes", "Page", "edition"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        bookTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bookTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(bookTable);
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Author");
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Publisher");
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Content");
+
+        combCatagory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combCatagoryActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Page");
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Edition");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(combPublisher, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtContent)
+                                .addComponent(combAuthor, 0, 168, Short.MAX_VALUE)
+                                .addComponent(combCatagory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnDelete)
+                            .addGap(53, 53, 53)
+                            .addComponent(btnCancle))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnAdd)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnUpdate)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtPage)
+                            .addComponent(txtEdition))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combCatagory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(combAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combPublisher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEdition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd)
+                            .addComponent(btnUpdate))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDelete)
+                            .addComponent(btnCancle))
+                        .addGap(36, 36, 36))))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+       String bName = txtName.getText();
+catagoryItem c = (catagoryItem) combCatagory.getSelectedItem();
+authorItem a = (authorItem) combAuthor.getSelectedItem();
+publisherItem pt = (publisherItem) combPublisher.getSelectedItem();
+String content = txtContent.getText();
+
+try {
+    pre = con.prepareStatement("insert into book(bookName, Catagory, author, publisher, contente, page, edition) values (?, ?, ?, ?, ?, ?, ?)");
+
+    pre.setString(1, bName);
+    pre.setInt(2, c.id);
+    pre.setInt(3, a.id);
+    pre.setInt(4, pt.id);
+    pre.setString(5, content);
+    pre.setInt(6, 0); // page — set to 0 or replace with a variable if available
+    pre.setInt(7, 1); // edition — set to 1 or replace with a variable if available
+
+    int p = pre.executeUpdate();
+
+    if (p == 1) {
+        JOptionPane.showMessageDialog(this, "book added");
+
+        txtName.setText("");
+        combCatagory.setSelectedIndex(-1);
+        combAuthor.setSelectedIndex(-1);
+        combPublisher.setSelectedIndex(-1);
+        txtContent.setText("");
+        txtPage.setText("");
+        txtEdition.setText("");
+
+
+        bookLode();
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Errore");
+    }
+
+} catch (SQLException ex) {
+    Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+}
+
+        
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void bookTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookTableMouseClicked
+        // TODO add your handling code here:
+         DefaultTableModel d1=(DefaultTableModel)bookTable.getModel();
+         int selectedIndex=bookTable.getSelectedRow();
+         int id=Integer.parseInt(d1.getValueAt(selectedIndex,0).toString());
+         txtName.setText(d1.getValueAt(selectedIndex,1).toString());
+         txtContent.setText(d1.getValueAt(selectedIndex,1).toString());
+         combCatagory.setSelectedItem(d1.getValueAt(selectedIndex,5).toString());
+         combAuthor.setSelectedItem(d1.getValueAt(selectedIndex,6).toString());
+         combPublisher.setSelectedItem(d1.getValueAt(selectedIndex,5).toString());
+         txtPage.setText(d1.getValueAt(selectedIndex,6).toString());
+         //txtEdition.setText(d1.getValueAt(selectedIndex,8).toString());
+         btnAdd.setEnabled(false);
+    }//GEN-LAST:event_bookTableMouseClicked
+       
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+          DefaultTableModel d1=(DefaultTableModel)bookTable.getModel();
+         int selectedIndex=bookTable.getSelectedRow();
+         int id=Integer.parseInt(d1.getValueAt(selectedIndex,0).toString());
+         String name=txtName.getText();
+         String content=txtContent.getText();
+         //String edition=txtEdition.setText();
+        
+        try {
+            pre =con.prepareStatement("update book set bookName=?,contente=? where Id=?");
+            
+            pre.setString(1,name);
+            pre.setString(2,content);
+            pre.setInt(3,id);
+            int p=pre.executeUpdate();
+            if(p==1){
+                JOptionPane.showMessageDialog(this,"BOOK updated");
+
+                    txtName.setText("");
+                    txtContent.setText("");
+                    txtContent.setText("");
+                    txtPage.getText();
+                    txtName.requestFocus();
+                   bookLode();
+                    btnAdd.setEnabled(true);
+                    
+
+
+                 }else{
+                      JOptionPane.showMessageDialog(this,"Errore");
+
+                   }
+                  
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel d1=(DefaultTableModel)bookTable.getModel();
+         int selectedIndex=bookTable.getSelectedRow();
+         int id=Integer.parseInt(d1.getValueAt(selectedIndex,0).toString());
+         
+        
+        try {
+            pre =con.prepareStatement("DELETE FROM book where Id=?");
+     
+        
+            pre.setInt(1,id);
+          
+            int p=pre.executeUpdate();
+            if(p==1){
+                JOptionPane.showMessageDialog(this,"book deleted");
+
+                    txtName.setText("");
+                    txtContent.setText("");
+                    txtContent.setText("");
+                    txtPage.getText();
+                    txtName.requestFocus();
+                   bookLode();
+                    btnAdd.setEnabled(true);
+                    
+
+
+                 }else{
+                      JOptionPane.showMessageDialog(this,"Errore");
+
+                   }
+                  
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnCancleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancleActionPerformed
+
+    private void combCatagoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combCatagoryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combCatagoryActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Book.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Book.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Book.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Book.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Book().setVisible(true);
+            }
+        });
+        
+    }
+  
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable bookTable;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCancle;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox combAuthor;
+    private javax.swing.JComboBox combCatagory;
+    private javax.swing.JComboBox combPublisher;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField txtContent;
+    private javax.swing.JTextField txtEdition;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPage;
+    // End of variables declaration//GEN-END:variables
+}
